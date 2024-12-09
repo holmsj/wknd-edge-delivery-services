@@ -260,6 +260,7 @@ function loadDelayed() {
   window.setTimeout(() => {
     window.hlx.plugins.load('delayed');
     window.hlx.plugins.run('loadDelayed');
+    initSidekick();
     return import('./delayed.js');
   }, 3000);
   // load anything that can be postponed to the latest here
@@ -340,5 +341,40 @@ sampleRUM.always.on('convert', (data) => {
   tempConversionEvent = undefined;
   conversionEvent = undefined;
 });
+
+function sidekickBlockListener(blockName) {
+  return () => {
+    const blockExists = document.querySelector(`.block.${blockName}`);
+    if (!blockExists) {
+      const block = buildBlock(blockName, '');
+      document.querySelector('main').append(block);
+      decorateBlock(block);
+      loadBlock(block);
+    } else {
+      // block already exists, post a message for block to handle to update/display
+      window.postMessage({ sidekickInit: true, block: blockName }, getOrigin());
+    }
+  };
+}
+
+function initSidekick() {
+  let sk = document.querySelector('helix-sidekick');
+
+  const blockPlugins = ['references'];
+
+  if (sk) {
+    blockPlugins.forEach((plugin) => {
+      sk.addEventListener(`custom:${plugin}`, sidekickBlockListener(plugin));
+    });
+  } else {
+    // wait for sidekick to be loaded
+    document.addEventListener('helix-sidekick-ready', () => {
+      sk = document.querySelector('helix-sidekick');
+      blockPlugins.forEach((plugin) => {
+        sk.addEventListener(`custom:${plugin}`, sidekickBlockListener(plugin));
+      });
+    }, { once: true });
+  }
+}
 
 loadPage();
