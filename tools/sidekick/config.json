@@ -9,21 +9,63 @@
       "includePaths": [ "**.docx**" ]
     },
     {
-      "id": "asset-library",
-      "title": "My Assets",
-      "environments": [ "edit" ],
-      "url": "https://experience.adobe.com/solutions/CQ-assets-selectors/static-assets/resources/franklin/asset-selector.html?rail=false",
-      "isPalette": true,
-      "includePaths": [ "**.docx**" ],
-      "paletteRect": "top: 50px; bottom: 10px; right: 10px; left: auto; width:800px; height: calc(100vh - 60px)"
+      "id": "tools",
+      "title": "Tools",
+      "isContainer": true
     },
     {
-      "id": "generate-variations",
-      "title": "Generate Variations",
-      "url": "https://experience.adobe.com/aem/generate-variations",
+      "containerId": "tools",
+      "id": "localize",
+      "title": "Localize",
+      "environments": [
+        "edit"
+      ],
+      "url": "https://milo.adobe.com/tools/loc/index.html",
+      "passReferrer": true,
       "passConfig": true,
-      "environments": [ "preview", "live", "edit" ],
-      "includePaths": ["**.docx**"]
+      "excludePaths": [ "/**" ],
+      "includePaths": [ "**/:x**" ]
+    },
+    {
+      "containerId": "tools",
+      "title": "Check Schema",
+      "id": "checkschema",
+      "environments": ["prod"],
+      "event": "check-schema",
+      "excludePaths": [
+        "/tools**",
+        "*.json"
+      ]
+    },
+    {
+      "containerId": "tools",
+      "title": "Preflight",
+      "id": "preflight",
+      "environments": [
+        "dev",
+        "preview",
+        "live"
+      ],
+      "event": "preflight"
+    },
+    {
+      "containerId": "tools",
+      "id": "locales",
+      "title": "Locales",
+      "environments": [
+        "edit",
+        "dev",
+        "preview",
+        "live"
+      ],
+      "isPalette": true,
+      "passConfig": true,
+      "passReferrer": true,
+      "paletteRect": "top: auto; bottom: 25px; left: 75px; height: 388px; width: 360px;",
+      "url": "https://milo.adobe.com/tools/locale-nav",
+      "includePaths": [
+        "**.docx**"
+      ]
     }
   ]
 }
